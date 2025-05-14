@@ -1,11 +1,32 @@
-users_db = []
+from pymongo import MongoClient
+import os
+from dotenv import load_dotenv
 
-def insert_user(username, password_hash, role):
-    user = {"username": username, "password": password_hash, "role": role}
-    users_db.append(user)
+load_dotenv()
 
-def get_user(username, role):
-    for user in users_db:
-        if user["username"] == username and user["role"] == role:
-            return user
-    return None
+MONGO_URI = os.getenv("MONGO_URI")
+
+client = MongoClient(MONGO_URI)
+db = client["phdcci"]
+
+users_col = db["users"]
+jobs_col = db["job_posts"]
+apps_col = db["applications"]
+
+def insert_user(user):
+    users_col.insert_one(user)
+
+def get_user_by_username(username):
+    return users_col.find_one({"username": username})
+
+def insert_job(job):
+    jobs_col.insert_one(job)
+
+def get_all_jobs():
+    return list(jobs_col.find())
+
+def insert_application(app):
+    apps_col.insert_one(app)
+
+def get_applications_by_student(username):
+    return list(apps_col.find({"student": username}))
