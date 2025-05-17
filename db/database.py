@@ -6,7 +6,7 @@ load_dotenv()
 
 MONGO_URI = os.getenv("MONGO_URI")
 
-client = MongoClient(MONGO_URI)
+client = MongoClient("mongodb+srv://PHDCCI_Internship_admin:k6lnh1oryhad9ovR@cluster0.ht97vch.mongodb.net/")
 db = client["phdcci"]
 
 users_col = db["users"]
